@@ -38,12 +38,4 @@ https://huggingface.co/Qwen/Qwen2-0.5B-Instruct-GGUF/resolve/main/qwen2-0_5b-ins
 # ===== RUN CONFIG =====
 EXPOSE 8000
 
-CMD ["./build/bin/llama-server",
-"-m", "models/model.gguf",
-"--host", "0.0.0.0",
-"--port", "8000",
-"-c", "64",
-"-t", "1",
-"--parallel", "1",
-"--mlock", "0",
-"--no-mmap"]
+CMD ["./build/bin/llama-server","-m","models/model.gguf","--host","0.0.0.0","--port","8000","-c","64","-t","1","--parallel","1","--mlock","0","--no-mmap"]
