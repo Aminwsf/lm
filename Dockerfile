@@ -8,26 +8,26 @@ RUN apt update && apt install -y \
     cmake \
     curl \
     wget \
-    python3 \
-    python3-pip
+    python3
 
 WORKDIR /app
 
-# ---- llama.cpp ----
+# ---- clone llama.cpp ----
 RUN git clone https://github.com/ggml-org/llama.cpp .
-RUN make -j2
+ 
+# ---- build with CMake ----
+RUN mkdir build && cd build && cmake .. && cmake --build . -j2
 
-# ---- model folder ----
+# ---- model ----
 RUN mkdir -p models
 
-# ---- lightweight model (TinyLlama Q2) ----
 RUN wget -O models/model.gguf \
 https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q2_K.gguf
 
 EXPOSE 8000
 
 # ---- OpenAI compatible server ----
-CMD ["./llama-server", \
+CMD ["./build/bin/llama-server", \
 "-m", "models/model.gguf", \
 "--host", "0.0.0.0", \
 "--port", "8000", \
